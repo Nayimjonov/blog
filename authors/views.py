@@ -8,7 +8,12 @@ from .serializers import AuthorModelSerializer
 class AuthorAPIView(APIView):
     def get(self, request):
         authors = Author.objects.all()
-        serialize = AuthorModelSerializer(authors, many=True)
-        return Response(serialize.data)
+        serializer = AuthorModelSerializer(authors, many=True)
+        return Response(serializer.data)
 
     def post(self, request):
+        serializer = AuthorModelSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
