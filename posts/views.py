@@ -20,6 +20,13 @@ class PostAPIView(APIView):
         return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
 
 class PostDetailAPIView(APIView):
+    def get_object(self, pk):
+        try:
+            return Post.objects.get(pk=pk)
+        except Post.DoesNotExist:
+            raise Http404
+
+
 
 
 
