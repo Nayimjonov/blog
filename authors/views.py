@@ -10,3 +10,5 @@ class AuthorAPIView(APIView):
         authors = Author.objects.all()
         serialize = AuthorModelSerializer(authors, many=True)
         return Response(serialize.data)
+
+    def post(self, request):
