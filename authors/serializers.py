@@ -18,6 +18,6 @@ class AuthorModelSerializer(serializers.ModelSerializer):
         return value
 
     def validate_bio(self, value):
-        if value and len(value.split()) < 5:
-            raise serializers.ValidationError("Biografiya kamida 5 ta so'zdan iborat bo'lishi kerak.")
+        if value and len(value.split()) < 2:
+            raise serializers.ValidationError("Biografiya kamida 2 ta so'zdan iborat bo'lishi kerak.")
         return value
