@@ -11,3 +11,12 @@ class PostAPIView(APIView):
         posts = Post.objects.all()
         serializer = PostModelSerializer(posts, many=True)
         return Response(serializer.data)
+
+    def post(self, request):
+        serializer = PostModelSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+
+
