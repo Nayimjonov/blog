@@ -40,5 +40,8 @@ class AuthorDetailView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
+        author = self.get_object(pk)
+        author.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
