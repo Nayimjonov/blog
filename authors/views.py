@@ -27,5 +27,10 @@ class AuthorDetailView(APIView):
             raise Http404
 
     def get(self, request, pk):
+        author = self.get_object(pk)
+        serializer = AuthorModelSerializer(author)
+        return Response(serializer.data)
+
+
 
 
