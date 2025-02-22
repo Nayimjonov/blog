@@ -43,6 +43,3 @@ class AuthorDetailAPIView(APIView):
         author = self.get_object(pk)
         author.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-
