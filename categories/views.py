@@ -21,3 +21,7 @@ class CategoryAPIView(APIView):
 
 class CategoryDetailAPIView(APIView):
     def get_object(self, pk):
+        try:
+            return Category.objects.get(pk=pk)
+        except Category.DoesNotExist:
+            raise Http404
