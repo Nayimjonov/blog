@@ -31,6 +31,14 @@ class CommentDetailAPIView(APIView):
         serializer = CommentModelSerializer(comment)
         return Response(serializer.data)
 
+    def put(self, request, pk):
+        comment = self.get_object(pk)
+        serializer = CommentModelSerializer(comment, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 
