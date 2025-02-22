@@ -32,6 +32,13 @@ class CategoryDetailAPIView(APIView):
         return Response(serializer.data)
 
     def put(self, request, pk):
+        category = self.get_object(pk)
+        serializer = CategoryModelSerializer(category, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 
