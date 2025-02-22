@@ -19,4 +19,21 @@ class CommentAPIView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
 
+class CommentDetailAPIView(APIView):
+    def get_object(self, pk):
+        try:
+            return Comment.objects.get(pk=pk)
+        except  Comment.DoesNotExist:
+            raise Http404
+
+
+
+
+
+
+
+
+
+
+
 
