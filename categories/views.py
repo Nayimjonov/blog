@@ -25,3 +25,5 @@ class CategoryDetailAPIView(APIView):
             return Category.objects.get(pk=pk)
         except Category.DoesNotExist:
             raise Http404
+
+    def get(self, request, pk):
