@@ -26,6 +26,10 @@ class CommentDetailAPIView(APIView):
         except  Comment.DoesNotExist:
             raise Http404
 
+    def get(self, request, pk):
+        comment = self.get_object(pk)
+        serializer = CommentModelSerializer(comment)
+        return Response(serializer.data)
 
 
 
