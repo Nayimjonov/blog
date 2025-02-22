@@ -8,5 +8,9 @@ from .serializers import CommentModelSerializer
 
 class CommentAPIView(APIView):
     def get(self, request):
+        comments = Comment.objects.all()
+        serializer = CommentModelSerializer(comments, many=True)
+        return Response(serializer.data)
+
 
 
