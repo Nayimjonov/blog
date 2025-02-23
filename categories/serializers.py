@@ -20,6 +20,5 @@ class CategoryModelSerializer(serializers.ModelSerializer):
         instance.description = validated_data.get('description', instance.description)
         if 'name' in validated_data:
             instance.slug = slugify(validated_data['name'])
-
         instance.save()
         return instance
