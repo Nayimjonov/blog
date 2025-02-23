@@ -16,8 +16,3 @@ class AuthorModelSerializer(serializers.ModelSerializer):
         if Author.objects.filter(email=value).exists():
             raise serializers.ValidationError("Bu email manzil bilan ro'yxatdan o'tilgan.")
         return value
-
-    def validate_bio(self, value):
-        if value and len(value.split()) < 2:
-            raise serializers.ValidationError("Biografiya kamida 2 ta so'zdan iborat bo'lishi kerak.")
-        return value
