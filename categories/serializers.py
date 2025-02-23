@@ -4,10 +4,13 @@ from django.utils.text import slugify
 
 
 class CategoryModelSerializer(serializers.ModelSerializer):
+    slug = serializers.CharField(required=False)
+
     class Meta:
         model = Category
         fields = ('id', 'name', 'slug', 'description')
 
     def create(self, validated_data):
-        validated_data['slug'] = slugify(validated_data['name'])
+        if 'slug' not in validated_data:
+            validated_data['slug'] = slugify(validated_data['name'])
         return super().create(validated_data)
