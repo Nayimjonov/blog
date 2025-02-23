@@ -14,3 +14,12 @@ class CategoryModelSerializer(serializers.ModelSerializer):
         if 'slug' not in validated_data:
             validated_data['slug'] = slugify(validated_data['name'])
         return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        instance.name = validated_data.get('name', instance.name)
+        instance.description = validated_data.get('description', instance.description)
+        if 'name' in validated_data:
+            instance.slug = slugify(validated_data['name'])
+
+        instance.save()
+        return instance
