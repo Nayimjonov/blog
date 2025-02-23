@@ -43,19 +43,3 @@ class CategoryDetailAPIView(APIView):
         category = self.get_object(pk)
         category.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
