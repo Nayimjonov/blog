@@ -1,8 +1,8 @@
 from rest_framework import serializers
-from authors.serializers import AuthorModelSerializer
-from .models import Post, Tag
 from django.utils.text import slugify
+from authors.serializers import AuthorModelSerializer
 from categories.serializers import CategoryModelSerializer
+from .models import Post, Tag
 
 
 class TagModelSerializer(serializers.ModelSerializer):
@@ -16,8 +16,14 @@ class TagModelSerializer(serializers.ModelSerializer):
         return obj.posts.count()
 
     def create(self, validated_data):
-        validated_data['slug'] = slugify(validated_data['name'])
+        validated_data['slug'] = slugify(validated_data.get('name'))
         return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        instance.name = validated_data.get('name', instance.name)
+        instance.slug = slugify(instance.name)
+        instance.save()
+        return instance
 
 
 class PostModelSerializer(serializers.ModelSerializer):
@@ -34,5 +40,13 @@ class PostModelSerializer(serializers.ModelSerializer):
         return obj.comments.count()
 
     def create(self, validated_data):
-        validated_data['slug'] = slugify(validated_data['title'])
+        validated_data['slug'] = slugify(validated_data.get('title'))
         return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        instance.title = validated_data.get('title', instance.title)
+        instance.slug = slugify(instance.title)
+        instance.content = validated_data.get('content', instance.content)
+        instance.status = validated_data.get('status', instance.status)
+        instance.save()
+        return instance
