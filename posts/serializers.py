@@ -25,7 +25,6 @@ class TagModelSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
-
 class PostModelSerializer(serializers.ModelSerializer):
     author = AuthorModelSerializer()
     category = CategoryModelSerializer()
