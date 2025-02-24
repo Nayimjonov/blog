@@ -7,7 +7,6 @@ from .models import Post, Tag
 
 class TagModelSerializer(serializers.ModelSerializer):
     post_count = serializers.SerializerMethodField()
-    slug = serializers.SlugField(required=False)
 
     class Meta:
         model = Tag
@@ -32,7 +31,6 @@ class PostModelSerializer(serializers.ModelSerializer):
     category = CategoryModelSerializer()
     tags = TagModelSerializer(many=True)
     comments_count = serializers.SerializerMethodField()
-    slug = serializers.SlugField(required=False)
 
     class Meta:
         model = Post

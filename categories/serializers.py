@@ -5,10 +5,12 @@ from django.utils.text import slugify
 
 class CategoryModelSerializer(serializers.ModelSerializer):
     slug = serializers.CharField(required=False)
+    posts_count = serializers.IntegerField(source='posts.count', read_only=True)
+
 
     class Meta:
         model = Category
-        fields = ('id', 'name', 'slug', 'description')
+        fields = ('id', 'name', 'slug', 'description', 'posts_count')
 
     def create(self, validated_data):
         if 'slug' not in validated_data:
