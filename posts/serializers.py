@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.utils.text import slugify
-from authors.models import Author
-from categories.models import Category
+from authors.serializers import AuthorModelSerializer
+from categories.serializers import CategoryModelSerializer
 from .models import Post, Tag
 
 
@@ -30,14 +30,18 @@ class TagModelSerializer(serializers.ModelSerializer):
 
 class PostModelSerializer(serializers.ModelSerializer):
     slug = serializers.CharField(required=False)
-    author = serializers.PrimaryKeyRelatedField(queryset=Author.objects.all())
-    category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
-    tags = serializers.PrimaryKeyRelatedField(queryset=Tag.objects.all(), many=True)
-    comments_count = serializers.SerializerMethodField()
+    author = AuthorModelSerializer()
+    category = CategoryModelSerializer()
+    tags = TagModelSerializer(many=True)
+    comments_count = serializers.IntegerField(source="comments.count", read_only=True)
 
     class Meta:
         model = Post
-        fields = ('id', 'title', 'slug', 'content', 'status', 'created_at', 'updated_at', 'author', 'category', 'tags', 'comments_count')
+        fields = (
+            'id', 'title', 'slug', 'content', 'status',
+            'created_at', 'updated_at', 'author', 'category',
+            'tags', 'comments_count'
+        )
 
     def get_comments_count(self, obj):
         return obj.comments.count()
