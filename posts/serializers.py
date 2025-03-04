@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.utils.text import slugify
-from authors.serializers import AuthorModelSerializer
-from categories.serializers import CategoryModelSerializer
+from authors.models import Author
+from categories.models import Category
 from .models import Post, Tag
 
 
@@ -30,9 +30,9 @@ class TagModelSerializer(serializers.ModelSerializer):
 
 class PostModelSerializer(serializers.ModelSerializer):
     slug = serializers.CharField(required=False)
-    author = AuthorModelSerializer()
-    category = CategoryModelSerializer()
-    tags = TagModelSerializer(many=True)
+    author = serializers.PrimaryKeyRelatedField(queryset=Author.objects.all())
+    category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
+    tags = serializers.PrimaryKeyRelatedField(queryset=Tag.objects.all(), many=True)
     comments_count = serializers.SerializerMethodField()
 
     class Meta:
