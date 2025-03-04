@@ -39,7 +39,7 @@ class PostModelSerializer(serializers.ModelSerializer):
     status = serializers.ChoiceField(choices=Post.STATUS_CHOICES)
     created_at = serializers.DateTimeField(read_only=True)
     updated_at = serializers.DateTimeField(read_only=True)
-    comments_count = serializers.SerializerMethodField()
+    comments_count = serializers.IntegerField(source="comments.count", read_only=True)
 
     class Meta:
         model = Post
