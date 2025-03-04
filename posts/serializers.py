@@ -6,6 +6,7 @@ from .models import Post, Tag
 
 
 class TagModelSerializer(serializers.ModelSerializer):
+    slug = serializers.CharField(required=False)
     post_count = serializers.SerializerMethodField()
 
     class Meta:
@@ -16,12 +17,14 @@ class TagModelSerializer(serializers.ModelSerializer):
         return obj.posts.count()
 
     def create(self, validated_data):
-        validated_data['slug'] = slugify(validated_data.get('name'))
+        if 'slug' not in validated_data:
+            validated_data['slug'] = slugify(validated_data['name'])
         return super().create(validated_data)
 
     def update(self, instance, validated_data):
         instance.name = validated_data.get('name', instance.name)
-        instance.slug = slugify(instance.name)
+        if 'name' in validated_data:
+            instance.slug = slugify(validated_data['name'])
         instance.save()
         return instance
 
