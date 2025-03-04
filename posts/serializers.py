@@ -29,6 +29,7 @@ class TagModelSerializer(serializers.ModelSerializer):
         return instance
 
 class PostModelSerializer(serializers.ModelSerializer):
+    slug = serializers.CharField(required=False)
     author = AuthorModelSerializer()
     category = CategoryModelSerializer()
     tags = TagModelSerializer(many=True)
@@ -42,13 +43,15 @@ class PostModelSerializer(serializers.ModelSerializer):
         return obj.comments.count()
 
     def create(self, validated_data):
-        validated_data['slug'] = slugify(validated_data.get('title'))
+        if 'slug' not in validated_data:
+            validated_data['slug'] = slugify(validated_data['title'])
         return super().create(validated_data)
 
     def update(self, instance, validated_data):
         instance.title = validated_data.get('title', instance.title)
-        instance.slug = slugify(instance.title)
         instance.content = validated_data.get('content', instance.content)
         instance.status = validated_data.get('status', instance.status)
+        if 'title' in validated_data:
+            instance.slug = slugify(validated_data['title'])
         instance.save()
         return instance
