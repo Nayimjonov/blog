@@ -7,4 +7,4 @@ class Author(models.Model):
     bio = models.TextField(max_length=300)
 
     def __str__(self):
-        return f"{self.name}"
+        return self.name
