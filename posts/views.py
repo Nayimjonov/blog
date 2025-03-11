@@ -1,51 +1,34 @@
-from rest_framework.views import APIView
-from django.http import Http404
+from rest_framework import generics
 from rest_framework.response import Response
-from rest_framework import status
-from .models import Post, Tag
-from .serializers import PostModelSerializer
+from rest_framework.views import APIView
+
+from .serializers import TagSerializer, PostSerializer
+from .models import Tag, Post
+from .pagination import TagListPagination, PostListPagination
 
 
-class PostAPIView(APIView):
-    def get(self, request):
-        posts = Post.objects.all()
-        serializer = PostModelSerializer(posts, many=True)
-        return Response(serializer.data)
+class TagListView(generics.ListAPIView):
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
+    pagination_class = TagListPagination
 
-    def post(self, request):
-        serializer = PostModelSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-class PostDetailAPIView(APIView):
-    def get_object(self, pk):
+class PostListByTagView(APIView):
+    def get(self, request, slug):
         try:
-            return Post.objects.get(pk=pk)
-        except Post.DoesNotExist:
-            raise Http404
-
-    def get(self, request, pk):
-        post = self.get_object(pk)
-        serializer = PostModelSerializer(post)
+            tag = Tag.objects.get(slug=slug)
+        except Tag.DoesNotExist as ex:
+            return Response({
+                'error': 'Tag Not Found'
+            }, status=404)
+        serializer = PostSerializer(tag.posts, many=True)
         return Response(serializer.data)
 
-    def put(self, request, pk):
-        post = self.get_object(pk)
-        serializer = PostModelSerializer(post, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class PostListCreateView(generics.ListCreateAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    pagination_class = PostListPagination
 
-    def delete(self, request, pk):
-        post = self.get_object(pk)
-        post.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-
-
-
-
+class PostRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    lookup_field = 'slug'
