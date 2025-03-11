@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.utils.text import slugify
-from authors.serializers import AuthorModelSerializer
+from authors.serializers import AuthorSerializer
 from categories.serializers import CategoryModelSerializer
 from authors.models import Author
 from categories.models import Category
@@ -33,7 +33,7 @@ class TagModelSerializer(serializers.ModelSerializer):
 
 class PostModelSerializer(serializers.ModelSerializer):
     slug = serializers.CharField(required=False)
-    author = AuthorModelSerializer()
+    author = AuthorSerializer()
     category = CategoryModelSerializer()
     tags = TagModelSerializer(many=True)
     status = serializers.ChoiceField(choices=Post.STATUS_CHOICES)
